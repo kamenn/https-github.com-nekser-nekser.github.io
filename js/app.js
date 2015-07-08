@@ -122,7 +122,7 @@ function createNewSquare(){
 function renderBackground(){
 	var bgrImg = resources.get('images/bgr.png');
 
-	context.drawImage(img, 0, 0, canvas.width, canvas.height);
+	context.drawImage(bgrImg, 0, 0, canvas.width, canvas.height);
 
 }
 function render(){
