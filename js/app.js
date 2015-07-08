@@ -127,8 +127,7 @@ function render(){
 }
 
 function renderSquare(Square){
-	var img = new Image(); 
-	img.src = IMAGES_PATH + '/1.png'
+	var img = Square.image
 	context.drawImage(img, Square.x, Square.y, SQUARE_SIZE, SQUARE_SIZE);
 	context.font = "30px Arial";
 	context.textAlign = "center";
