@@ -67,7 +67,6 @@ function update(dt){
 		console.log("updateSquares");
 		updateSquares();
 	}
-	checkHandles();
 	checkCollisions(squares[squares.length - 1]);
 }
 
@@ -143,30 +142,56 @@ function renderSquare(Square){
 	context.fillText(Square.number,Square.x + SQUARE_SIZE / 2, Square.y + SQUARE_SIZE / 2);
 }
 
-//Обработчик пользовательских нажатий
-function checkHandles(){
-
+function squareToBottom(Square){
+	var topY = canvas.height - SQUARE_SIZE;
+	for(var i = 0; i < squares.length; i++){
+		if(!squares[i].isActive && squares[i].x == Square.x){
+			if(squares[i].y <= topY){
+				topY = squares[i].y - SQUARE_SIZE;
+			}
+		}
+	}
+	Square.y = topY;
 }
+
+//Обработчик пользовательских нажатий
 document.addEventListener('keydown', function(event) {
 	var currentSquare = squares[squares.length - 1];
 
 	switch(event.keyCode) {
     case 39:
         key = 'RIGHT';
+        var allowToRight = true;
         if(currentSquare.x + SQUARE_SIZE < canvas.width){
+        	for(var i = 0; i < squares.length; i++){
+				if(!squares[i].isActive && squares[i].y == currentSquare.y){
+					if(currentSquare.x + SQUARE_SIZE == squares[i].x) allowToRight	= false;
+				}
+			}
+        }
+        if(allowToRight){
         	currentSquare.x += SQUARE_SIZE;
         }
         break;
     case 37:
-        key = 'LEFT'; 
+        key = 'LEFT';
+        var allowToLeft = true; 
         if(currentSquare.x > 0){
-			currentSquare.x -= SQUARE_SIZE;
+        	for(var i = 0; i < squares.length; i++){
+				if(!squares[i].isActive && squares[i].y == currentSquare.y){
+					if(currentSquare.x - SQUARE_SIZE == squares[i].x) allowToLeft	= false;
+				}
+			}
+        }
+        if(allowToLeft){
+        	currentSquare.x -= SQUARE_SIZE;
         }
         break;
     case 40:
         key = 'DOWN'; 
         if(currentSquare.y + SQUARE_SIZE < canvas.height){
-        	currentSquare.y += SQUARE_SIZE;
+        	squareToBottom(currentSquare);
+        	currentSquare.isActive = false;
         }
         break;
     }
