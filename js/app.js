@@ -29,7 +29,8 @@ document.body.appendChild(canvas);
 resources.load([
     'images/positive.png',
     'images/negative.png',
-    'images/zero.png'
+    'images/zero.png',
+    'images/bgr.png'
 ]);
 resources.onReady(init);
 
@@ -118,9 +119,15 @@ function createNewSquare(){
 		image: number <= 0 ? resources.get('images/negative.png') : resources.get('images/positive.png')
 	});
 }
+function renderBackground(){
+	var bgrImg = resources.get('images/bgr.png');
 
+	context.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+}
 function render(){
 	context.clearRect(0, 0, canvas.width, canvas.height);
+	renderBackground();
 	for(var i = 0; i < squares.length; i++){
 		renderSquare(squares[i])
 	}
