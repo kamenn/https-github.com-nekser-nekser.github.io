@@ -26,7 +26,12 @@ canvas.width = SQUARE_SIZE * 5 ;
 canvas.height = SQUARE_SIZE * 8;
 document.body.appendChild(canvas);
 
-
+resources.load([
+    'images/positive.png',
+    'images/negative.png',
+    'images/zero.png'
+]);
+resources.onReady(init);
 
 
 /*
@@ -102,12 +107,15 @@ function randomInteger(min, max) {
   rand = Math.round(rand);
   return rand;
 }
-function createNewSquare(){
+function createNewSquare(){	
+	var xCoord = randomInteger(0, 4) * SQUARE_SIZE;
+	var number = randomInteger(-10, 10);
 	squares.push({
-		x: randomInteger(0, 4) * SQUARE_SIZE,
+		x: xCoord,
 		y: 0,
 		isActive: true,
-		number: randomInteger(-10,10)
+		number: number,
+		image: number <= 0 ? resources.get('images/negative.png') : resources.get('images/positive.png')
 	});
 }
 
@@ -158,7 +166,3 @@ document.addEventListener('keydown', function(event) {
     }
    	console.log(squares[squares.length - 1].x);
 });
-
-
-
-init();
