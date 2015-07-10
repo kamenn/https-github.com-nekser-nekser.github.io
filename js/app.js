@@ -22,6 +22,9 @@ var squares = [];
 
 var canvas = document.createElement('canvas'),
 	context = canvas.getContext('2d');
+
+
+
 	//TODO: в конфиг
 var BOARD_WIDTH = SQUARE_SIZE * 5;
 var BOARD_HEIGHT = SQUARE_SIZE * 8;
@@ -53,10 +56,12 @@ resources.onReady(init);
 */
 function init(){
 	gameTime = 0;
+	gameOver = false;
 	SCORE = 0;
 	lastGameTime = 0;
 	lastTime = Date.now();
-	squares
+	squares.splice(0, squares.length);
+	freeColumns = [0,1,2,3,4];
 	createNewSquare();
 	main();
 
@@ -90,7 +95,6 @@ function update(dt){
 		updateSquares();
 	}
 	checkCollisions(squares[squares.length - 1]);
-	console.log(freeColumns);
 }
 
 function updateSquares(){
@@ -244,6 +248,17 @@ function squareToBottom(Square){
 	Square.y = topY;
 }
 
+
+//Обработчики клика
+canvas.addEventListener('click', function(){
+	var x = event.pageX - canvas.offsetLeft,
+        y = event.pageY - canvas.offsetTop;
+    if(x >= BOARD_WIDTH - 40 && x <= BOARD_WIDTH
+    	&& y >= 0 && y <= 40){
+    	//TODO Анимация кнопки
+    	init();
+    }
+});
 //Обработчик пользовательских нажатий (TODO: вынести в отдельный файл)
 document.addEventListener('keydown', function(event) {
 	var currentSquare = squares[squares.length - 1];
