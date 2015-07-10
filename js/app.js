@@ -15,7 +15,7 @@ var IMAGES_PATH = 'images';
 var lastTime = Date.now();
 var gameTime = 0;
 var lastGameTime = 0;
-var SQUARE_SIZE = 50;
+var SQUARE_SIZE = 80;
 var gameOver = false;
 
 var squares = [];
@@ -28,7 +28,7 @@ var canvas = document.createElement('canvas'),
 	//TODO: в конфиг
 var BOARD_WIDTH = SQUARE_SIZE * 5;
 var BOARD_HEIGHT = SQUARE_SIZE * 8;
-var STAND_HEIGHT = 8;
+var STAND_HEIGHT = 15;
 var HEADER_HEIGHT = SQUARE_SIZE * 2;
 var OFFSET_TOP = HEADER_HEIGHT;
 
