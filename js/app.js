@@ -29,7 +29,7 @@ var HEADER_HEIGHT = SQUARE_SIZE * 2;
 var OFFSET_TOP = HEADER_HEIGHT;
 
 var SCORE = 0;
-
+var freeColumns = [0,0,0,0,0];
 
 canvas.width = BOARD_WIDTH;
 canvas.height = BOARD_HEIGHT + STAND_HEIGHT;
@@ -81,10 +81,11 @@ function update(dt){
 	gameTime += dt;
 	if(gameTime	- lastGameTime > 1){
 		lastGameTime = gameTime;
-		console.log("updateSquares");
+		//console.log("updateSquares");
 		updateSquares();
 	}
 	checkCollisions(squares[squares.length - 1]);
+	console.log(freeColumns);
 }
 
 function updateSquares(){
@@ -92,13 +93,13 @@ function updateSquares(){
 
 	for(var i = 0; i < squares.length; i++){
 		if(squares[i].isActive){
-			console.log("updateActiveSquare");
+			//console.log("updateActiveSquare");
 			updateActiveSquare(squares[i]);
 			flag = true;
 		}
 	}
 	if(!flag){
-		console.log("new Square");
+		//console.log("new Square");
 		createNewSquare();
 	}
 }
@@ -114,9 +115,11 @@ function checkCollisions(Square){
 		if(!squares[i].isActive){
 			if(Square.y + SQUARE_SIZE >= squares[i].y && Square.x == squares[i].x){
 				Square.isActive	= false;
+				if(Square.y == OFFSET_TOP) freeColumns[Square.x / SQUARE_SIZE] = 1;
 			}
 		}
 	}
+	return Square.isActive;
 }
 
 function randomInteger(min, max) {
@@ -124,8 +127,15 @@ function randomInteger(min, max) {
   rand = Math.round(rand);
   return rand;
 }
+
+function gameOver(){
+	document.location.replace('http://yandex.ru');
+}
 function createNewSquare(){	
-	var xCoord = randomInteger(0, 4) * SQUARE_SIZE;
+	//checkTopLevel();
+	
+	xCoord = randomInteger(0, 4) * SQUARE_SIZE;
+
 	var number = 0;
 
 	/*
@@ -227,7 +237,7 @@ document.addEventListener('keydown', function(event) {
     case 39:
         key = 'RIGHT';
         var allowToRight = true;
-        if(currentSquare.x + SQUARE_SIZE < BOARD_WIDTH){
+        if(currentSquare.x + SQUARE_SIZE < BOARD_WIDTH && currentSquare.isActive){
         	for(var i = 0; i < squares.length; i++){
 				if(!squares[i].isActive && squares[i].y == currentSquare.y){
 					if(currentSquare.x + SQUARE_SIZE == squares[i].x) allowToRight	= false;
@@ -242,7 +252,7 @@ document.addEventListener('keydown', function(event) {
     case 37:
         key = 'LEFT';
         var allowToLeft = true; 
-        if(currentSquare.x > 0){
+        if(currentSquare.x > 0 && currentSquare.isActive){
         	for(var i = 0; i < squares.length; i++){
 				if(!squares[i].isActive && squares[i].y == currentSquare.y){
 					if(currentSquare.x - SQUARE_SIZE == squares[i].x) allowToLeft	= false;
@@ -256,11 +266,10 @@ document.addEventListener('keydown', function(event) {
         break;
     case 40:
         key = 'DOWN'; 
-        if(currentSquare.y + SQUARE_SIZE < BOARD_HEIGHT){
+        if(currentSquare.y + SQUARE_SIZE < BOARD_HEIGHT && currentSquare.isActive){
         	squareToBottom(currentSquare);
         	currentSquare.isActive = false;
         }
         break;
     }
-   	console.log(squares[squares.length - 1].x);
 });
