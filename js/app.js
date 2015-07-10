@@ -16,6 +16,7 @@ var lastTime = Date.now();
 var gameTime = 0;
 var lastGameTime = 0;
 var SQUARE_SIZE = 50;
+var gameOver = false;
 
 var squares = [];
 
@@ -29,7 +30,7 @@ var HEADER_HEIGHT = SQUARE_SIZE * 2;
 var OFFSET_TOP = HEADER_HEIGHT;
 
 var SCORE = 0;
-var freeColumns = [0,0,0,0,0];
+var freeColumns = [0,1,2,3,4];
 
 canvas.width = BOARD_WIDTH;
 canvas.height = BOARD_HEIGHT + STAND_HEIGHT;
@@ -64,22 +65,26 @@ function init(){
 
 
 function main(){
-	var now = Date.now();
+	if(!gameOver){
+		var now = Date.now();
 
-	var	delta = (now - lastTime) / 1000.0;
+		var	delta = (now - lastTime) / 1000.0;
 
-	update(delta);
+		update(delta);
 
-	render();
+		render();
 
-	lastTime = now;
-	requestAnimFrame(main);
+		lastTime = now;
+		requestAnimFrame(main);
+	} else {
+		alert("Game Over!");
+	}
 }
 
 
 function update(dt){
 	gameTime += dt;
-	if(gameTime	- lastGameTime > 1){
+	if(gameTime	- lastGameTime > 0.1){
 		lastGameTime = gameTime;
 		//console.log("updateSquares");
 		updateSquares();
@@ -115,7 +120,13 @@ function checkCollisions(Square){
 		if(!squares[i].isActive){
 			if(Square.y + SQUARE_SIZE >= squares[i].y && Square.x == squares[i].x){
 				Square.isActive	= false;
-				if(Square.y == OFFSET_TOP) freeColumns[Square.x / SQUARE_SIZE] = 1;
+			}
+		}
+	}
+	if(Square.y == OFFSET_TOP && !Square.isActive){
+		for(var k = 0; k < freeColumns.length; k++){
+			if(freeColumns[k] == Square.x / SQUARE_SIZE){
+				freeColumns.splice(k, 1);
 			}
 		}
 	}
@@ -128,13 +139,17 @@ function randomInteger(min, max) {
   return rand;
 }
 
-function gameOver(){
-	document.location.replace('http://yandex.ru');
+function setGameOver(){
+	gameOver = true;
+
 }
 function createNewSquare(){	
 	//checkTopLevel();
-	
-	xCoord = randomInteger(0, 4) * SQUARE_SIZE;
+	if(freeColumns.length == 0){
+		setGameOver();
+	}
+	var index = randomInteger(0, freeColumns.length - 1);
+	xCoord = freeColumns[index] * SQUARE_SIZE;
 
 	var number = 0;
 
