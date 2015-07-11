@@ -110,7 +110,7 @@ function checkPoints(){
 					squares[i].y == squares[j].y + SQUARE_SIZE){
 					if((squares[i].number > 10 && squares[j].number < 0) ||
 						(squares[i].number < -10 && squares[j].number > 0) ||
-						(squares[i].number >= -10 && squares[i].number =< 10)){
+						(squares[i].number >= -10 && squares[i].number <= 10)){
 						squares[i].number += squares[j].number;
 						if(squares[i].number > 0){
 							squares[i].image = resources.get('images/positive.png');
