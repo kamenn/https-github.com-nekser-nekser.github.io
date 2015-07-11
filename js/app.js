@@ -147,6 +147,7 @@ function checkPoints(){
 					squares[i].x == squares[j].x + SQUARE_SIZE && squares[i].number == (-1)*squares[j].number){
 					//TODO добавить анимацию слияния квадратов
 					squares[i].number = 0;
+					SCORE += Math.abs(squares[j].number);
 					squares[i].image = resources.get('images/zero.png');
 					squares.splice(j,1);
 					setTimeout(function(){
