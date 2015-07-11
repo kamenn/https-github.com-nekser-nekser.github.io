@@ -38,7 +38,9 @@ var freeColumns = [0,1,2,3,4];
 canvas.width = BOARD_WIDTH;
 canvas.height = BOARD_HEIGHT + STAND_HEIGHT;
 
-document.body.appendChild(canvas);
+var gameDiv = document.getElementById('game');
+
+gameDiv.appendChild(canvas);
 
 resources.load([
     'images/positive.png',
@@ -253,7 +255,7 @@ function squareToBottom(Square){
 canvas.addEventListener('click', function(){
 	var x = event.pageX - canvas.offsetLeft,
         y = event.pageY - canvas.offsetTop;
-    if(x >= BOARD_WIDTH - 40 && x <= BOARD_WIDTH
+    if(x >= canvas.offsetLeft + BOARD_WIDTH - 40 && x <= canvas.offsetTop + BOARD_WIDTH
     	&& y >= 0 && y <= 40){
     	//TODO Анимация кнопки
     	init();
