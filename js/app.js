@@ -91,14 +91,53 @@ function main(){
 
 function update(dt){
 	gameTime += dt;
-	if(gameTime	- lastGameTime > 0.1){
+	if(gameTime	- lastGameTime > 1){
 		lastGameTime = gameTime;
 		//console.log("updateSquares");
 		updateSquares();
 	}
 	checkCollisions(squares[squares.length - 1]);
+	checkPoints();
 }
-
+function checkPoints(){
+	for(var i = 0; i < squares.length; i++){
+		for(var j = 0; j < squares.length; j++){
+			if(squares[i] != squares[j]){
+				/*
+				*Сложение элементов друг на другом
+				*/
+				if(squares[i].x == squares[j].x && 
+					squares[i].y == squares[j].y + SQUARE_SIZE){
+					squares[i].number += squares[j].number;
+					if(squares[i].number > 0){
+						squares[i].image = resources.get('images/positive.png');
+						squares.splice(j,1);
+					} else if(squares[i].number < 0){
+						squares[i].image = resources.get('images/negative.png');
+						squares.splice(j,1);
+					} else {
+						squares[i].image = resources.get('images/zero.png');
+						SCORE += Math.abs(squares[j].number);
+						if(i > j){
+							squares.splice(i,1);
+							//TODO сделать удаление не сразу
+							squares.splice(j,1);
+						} else {
+							squares.splice(j,1);
+							setTimeout(function(){
+									for(var k = 0; k < squares.length; k++){
+										if(squares[k].number == 0){
+											squares.splice(k,1);
+										}
+									}
+							}, 2000);
+						}
+					}
+				}
+			}
+		}
+	}
+}
 function updateSquares(){
 	var flag = false;
 
