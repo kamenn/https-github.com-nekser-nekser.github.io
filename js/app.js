@@ -17,7 +17,7 @@ var gameTime = 0;
 var lastGameTime = 0;
 var SQUARE_SIZE = 80;
 var gameOver = false;
-
+var SPEED = 1.0;
 var squares = [];
 
 var canvas = document.createElement('canvas'),
@@ -91,13 +91,27 @@ function main(){
 
 function update(dt){
 	gameTime += dt;
-	if(gameTime	- lastGameTime > 1){
+	SPEED = 1 / (Math.floor( gameTime / 30 ) + 1);
+	console.log(SPEED);
+	if(gameTime	- lastGameTime > SPEED){
 		lastGameTime = gameTime;
 		//console.log("updateSquares");
 		updateSquares();
 	}
 	checkCollisions(squares[squares.length - 1]);
 	checkPoints();
+}
+function linkSquares(index_a, index_b, callback){
+	 (function() {
+        // Выполняем действия
+        squares[index_b].y += 10
+        if (squares[index_b].y == squares[index_a].y) {
+            callback(index_a, index_b);
+        } else {
+            setTimeout(arguments.callee, 10);
+        }
+    })();
+	
 }
 function checkPoints(){
 	for(var i = 0; i < squares.length; i++){
@@ -111,31 +125,38 @@ function checkPoints(){
 					if((squares[i].number > 10 && squares[j].number < 0) ||
 						(squares[i].number < -10 && squares[j].number > 0) ||
 						(squares[i].number >= -10 && squares[i].number <= 10)){
-						squares[i].number += squares[j].number;
-						if(squares[i].number > 0){
+						
+						linkSquares(i,j, function(i, j){
+							squares[i].number += squares[j].number;
+							
+							squares.splice(j,1);
+							if(squares[i].number > 0){
+							//squares.splice(j,1);
 							squares[i].image = resources.get('images/positive.png');
-							squares.splice(j,1);
-						} else if(squares[i].number < 0){
-							squares[i].image = resources.get('images/negative.png');
-							squares.splice(j,1);
-						} else {
-							squares[i].image = resources.get('images/zero.png');
-							SCORE += Math.abs(squares[j].number);
-							if(i > j){
-								squares.splice(i,1);
-								//TODO сделать удаление не сразу
-								squares.splice(j,1);
+							} else if(squares[i].number < 0){
+								
+								//squares.splice(j,1);
+								squares[i].image = resources.get('images/negative.png');
 							} else {
-								squares.splice(j,1);
-								setTimeout(function(){
-										for(var k = 0; k < squares.length; k++){
-											if(squares[k].number == 0){
-												destroySquare(k);
+								squares[i].image = resources.get('images/zero.png');
+								SCORE += Math.abs(squares[j].number);
+								if(i > j){
+									squares.splice(i,1);
+									//squares.splice(j,1);
+									//TODO сделать удаление не сраз
+								} else {
+									//squares.splice(j,1);
+									setTimeout(function(){
+											for(var k = 0; k < squares.length; k++){
+												if(squares[k].number == 0){
+													destroySquare(k);
+												}
 											}
-										}
-								}, 2000);
+									}, 2000);
+								}
 							}
-						}
+						});
+						
 					}
 				}
 			}
@@ -161,12 +182,30 @@ function checkPoints(){
 		}
 	}
 }
+/**
+ * @param {Function} callback Фукнция, вызываемая по окончании работы.
+ */
+function destroy(index, callback) {
+    // Инициализируем переменные
+
+    (function() {
+        // Выполняем действия
+        squares[index].width -= 10;
+        if (squares[index].width <= 0) {
+            callback();
+        } else {
+            setTimeout(arguments.callee, 5);
+        }
+    })();
+}
 /*
 *
 *Заглушка для метода уничтожения квадрта
 */
 function destroySquare(index){
-	squares.splice(index, 1);
+	destroy(index, function(){
+		squares.splice(index, 1);
+	});
 }
 function updateSquares(){
 	var flag = false;
@@ -183,12 +222,24 @@ function updateSquares(){
 		createNewSquare();
 	}
 }
-
+function moveSquare(Square, y, callback){
+	 (function() {
+        // Выполняем действия
+        Square.y += 10;
+        if (Square.y - y == SQUARE_SIZE) {
+            callback();
+        } else {
+            setTimeout(arguments.callee, 10);
+        }
+    })();
+	
+}
 function updateActiveSquare(Square){
-	Square.y += SQUARE_SIZE;
-	if(Square.y + SQUARE_SIZE >= BOARD_HEIGHT){
-		Square.isActive	= false;
-	}
+	moveSquare(Square, Square.y, function(){
+		if(Square.y + SQUARE_SIZE >= BOARD_HEIGHT){
+			Square.isActive	= false;
+		}
+	});
 }
 function checkCollisions(Square){
 	for(var i = 0; i < squares.length; i++){
@@ -242,6 +293,7 @@ function createNewSquare(){
 		y: OFFSET_TOP,
 		isActive: true,
 		number: number,
+		width: SQUARE_SIZE,
 		image: number <= 0 ? resources.get('images/negative.png') : resources.get('images/positive.png')
 	});
 }
@@ -296,8 +348,8 @@ function renderHeader(){
 	renderButtons();
 }
 function renderSquare(Square){
-	var img = Square.image
-	context.drawImage(img, Square.x, Square.y, SQUARE_SIZE, SQUARE_SIZE);
+	var img = Square.image;
+	context.drawImage(img, Square.x, Square.y, Square.width, Square.width);
 	context.font = "30px Arial";
 	context.textAlign = "center";
 	context.textBaseline  = "middle";
