@@ -27,7 +27,7 @@ var canvas = document.createElement('canvas'),
 
 	//TODO: в конфиг
 var BOARD_WIDTH = SQUARE_SIZE * 5;
-var BOARD_HEIGHT = SQUARE_SIZE * 7;
+var BOARD_HEIGHT = SQUARE_SIZE * 8;
 var STAND_HEIGHT = 15;
 var HEADER_HEIGHT = SQUARE_SIZE * 2;
 var OFFSET_TOP = HEADER_HEIGHT;
@@ -418,7 +418,7 @@ canvas.addEventListener('click', function(e){
 //Обработчик пользовательских нажатий (TODO: вынести в отдельный файл)
 document.addEventListener('keydown', function(event) {
 	var currentSquare = squares[squares.length - 1];
-
+	event.preventDefault();
 	switch(event.keyCode) {
     case 39:
         key = 'RIGHT';
