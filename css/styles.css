@@ -1,13 +1,3 @@
-body {
-	background: #00bcd5;
-}
-.description {
-	text-align: center;
-	font-family: HelveticaNeueCyr-Roman;
-}
-.stores {
-	text-align: center;
-}
 @font-face {
 	font-family: HelveticaNeueCyr-Light;
 	src: url(../fonts/HelveticaNeueCyr-Light.otf);
@@ -19,4 +9,22 @@ body {
 @font-face {
  	font-family: HelveticaNeueCyr-Roman;
  	src: url(../fonts/HelveticaNeueCyr-Roman.otf);
+}
+
+
+body {
+	background: #00bcd5;
+}
+.description {
+	text-align: center;
+	font-family: HelveticaNeueCyr-Roman;
+}
+.stores {
+	text-align: center;
+	margin:0 20%;
+	display: block;
+}
+.close-descr-btn {
+	position: relative;
+	left: 90px;
 }
