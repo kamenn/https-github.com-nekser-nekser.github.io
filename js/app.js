@@ -336,7 +336,7 @@ function renderTime(){
 	var seconds = Math.floor(gameTime % 60)
 	var time = minutes + ':' + (seconds < 10 ? '0'+seconds : seconds);
 
-	context.font = "20pxHelveticaNeueCyr-Light";
+	context.font = "20px HelveticaNeueCyr-Light";
 	context.textAlign = "right";
 	context.textBaseline  = "bottom";
 	context.fillStyle = "white";
