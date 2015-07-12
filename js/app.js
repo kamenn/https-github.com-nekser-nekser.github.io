@@ -336,14 +336,14 @@ function renderTime(){
 	var seconds = Math.floor(gameTime % 60)
 	var time = minutes + ':' + (seconds < 10 ? '0'+seconds : seconds);
 
-	context.font = "20px HelveticaNeueCyr-Light";
+	context.font = "20px HelveticaNeueCyr-Thin";
 	context.textAlign = "right";
 	context.textBaseline  = "bottom";
 	context.fillStyle = "white";
 	context.fillText("Time " + time, BOARD_WIDTH - 10, HEADER_HEIGHT - 10);
 }
 function renderScore(){
-	context.font = "20px HelveticaNeueCyr-Light";
+	context.font = "20px HelveticaNeueCyr-Thin";
 	context.textAlign = "left";
 	context.textBaseline  = "bottom";
 	context.fillStyle = "white";
@@ -372,7 +372,7 @@ function renderHeader(){
 function renderSquare(Square){
 	var img = Square.image;
 	context.drawImage(img, Square.x, Square.y, Square.width, Square.width);
-	context.font = "35px HelveticaNeueCyr-Thin";
+	context.font = "35px HelveticaNeueCyr-Light";
 	context.textAlign = "center";
 	context.textBaseline  = "middle";
 	context.fillStyle = "white";
