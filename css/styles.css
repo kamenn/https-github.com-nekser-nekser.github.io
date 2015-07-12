@@ -3,7 +3,7 @@ body {
 }
 .description {
 	text-align: center;
-	font-family: HelveticaNeueCyr-Light;
+	font-family: HelveticaNeueCyr-Roman;
 }
 .stores {
 	text-align: center;
@@ -15,4 +15,8 @@ body {
 @font-face {
  	font-family: HelveticaNeueCyr-Thin;
  	src: url(../fonts/HelveticaNeueCyr-Thin.otf);
+}
+@font-face {
+ 	font-family: HelveticaNeueCyr-Roman;
+ 	src: url(../fonts/HelveticaNeueCyr-Roman.otf);
 }
