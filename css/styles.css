@@ -19,6 +19,10 @@ body {
 	text-align: center;
 	font-family: HelveticaNeueCyr-Roman;
 }
+#descr {
+	position:absolute;
+	top: 30%;
+}
 .stores {
 	text-align: center;
 	margin:0 20%;
