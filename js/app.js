@@ -48,7 +48,8 @@ resources.load([
     'images/zero.png',
     'images/bgr.png',
     'images/header.png',
-    'images/refresh.png'
+    'images/refresh.png',
+    'images/logo.png'
 ]);
 resources.onReady(init);
 
@@ -101,10 +102,15 @@ function update(dt){
 	checkCollisions(squares[squares.length - 1]);
 	checkPoints();
 }
-function linkSquares(index_a, index_b, callback){
+function linkSquares(index_a, index_b, type,callback){
 	 (function() {
         // Выполняем действия
-        squares[index_b].y += 10
+        if(type == 'LEFT'){
+        	squares[index_b].x -= 10;	
+        }
+        if(type == 'DOWN'){
+        	squares[index_b].y += 10;	
+        }
         if (squares[index_b].y == squares[index_a].y) {
             callback(index_a, index_b);
         } else {
@@ -126,7 +132,7 @@ function checkPoints(){
 						(squares[i].number < -10 && squares[j].number > 0) ||
 						(squares[i].number >= -10 && squares[i].number <= 10)){
 						
-						linkSquares(i,j, function(i, j){
+						linkSquares(i,j, 'DOWN', function(i, j){
 							squares[i].number += squares[j].number;
 							
 							squares.splice(j,1);
@@ -165,20 +171,22 @@ function checkPoints(){
 	for(var i = 0; i < squares.length; i++){
 		for(var j = i; j < squares.length; j++){
 			if(squares[i].y == squares[j].y && 
-					squares[i].x == squares[j].x + SQUARE_SIZE && squares[i].number == (-1)*squares[j].number){
-					//TODO добавить анимацию слияния квадратов
-					squares[i].number = 0;
-					SCORE += Math.abs(squares[j].number);
-					squares[i].image = resources.get('images/zero.png');
-					squares.splice(j,1);
-					setTimeout(function(){
-										for(var k = 0; k < squares.length; k++){
-											if(squares[k].number == 0){
-												destroySquare(k);
-											}
+					squares[i].x + SQUARE_SIZE == squares[j].x && squares[i].number == (-1)*squares[j].number){
+					linkSquares(i,j,'LEFT', function(i,j){
+						squares[i].number = 0;
+						SCORE += Math.abs(squares[j].number);
+						squares[i].image = resources.get('images/zero.png');
+						squares.splice(j,1);
+						setTimeout(function(){
+									for(var k = 0; k < squares.length; k++){
+										if(squares[k].number == 0){
+											destroySquare(k);
 										}
+									}
 								}, 2000);
+					});
 			}
+			
 		}
 	}
 }
@@ -338,11 +346,17 @@ function renderScore(){
 function renderButtons(){
 	var refreshImage = resources.get('images/refresh.png');
 
-	context.drawImage(refreshImage, BOARD_WIDTH - 40, 0, 40, 40);
+	context.drawImage(refreshImage, BOARD_WIDTH - 40, HEADER_HEIGHT - 80, 40, 40);
+}
+function renderLogo(){
+	var logoImage = resources.get('images/logo.png');
+
+	context.drawImage(logoImage, 30, 20, BOARD_WIDTH - 60, HEADER_HEIGHT - 100)
 }
 function renderHeader(){
 	var headerImage = resources.get('images/header.png');
 	context.drawImage(headerImage, 0, 0, BOARD_WIDTH, HEADER_HEIGHT);
+	renderLogo();
 	renderTime();
 	renderScore();
 	renderButtons();
