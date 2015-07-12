@@ -362,8 +362,8 @@ function renderLogo(){
 	context.drawImage(logoImage, 30, 20, BOARD_WIDTH - 60, HEADER_HEIGHT - 100)
 }
 function renderHeader(){
-	var headerImage = resources.get('images/header.png');
-	context.drawImage(headerImage, 0, 0, BOARD_WIDTH, HEADER_HEIGHT);
+	//var headerImage = resources.get('images/header.png');
+	//context.drawImage(headerImage, 0, 0, BOARD_WIDTH, HEADER_HEIGHT);
 	renderLogo();
 	renderTime();
 	renderScore();
