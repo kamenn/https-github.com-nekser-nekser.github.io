@@ -3,10 +3,16 @@ body {
 }
 .description {
 	text-align: center;
+	font-family:HelveticaNeueCyr-Light;
 }
 .stores {
 	text-align: center;
 }
-footer {
-	color: white; 
+@font-face {
+	font-family: HelveticaNeueCyr-Light;
+	src: url(../fonts/HelveticaNeueCyr-Light.otf);
+}
+@font-face {
+ 	font-family: HelveticaNeueCyr-Thin;
+ 	src: url(../fonts/HelveticaNeueCyr-Thin.otf);
 }
