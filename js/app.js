@@ -387,11 +387,13 @@ function squareToBottom(Square){
 
 
 //Обработчики клика
-canvas.addEventListener('click', function(){
-	var x = event.pageX - canvas.offsetLeft,
-        y = event.pageY - canvas.offsetTop;
-    if(x >= canvas.offsetLeft + BOARD_WIDTH - 40 && x <= canvas.offsetTop + BOARD_WIDTH
-    	&& y >= 0 && y <= 40){
+canvas.addEventListener('click', function(e){
+	 e = e || window.event;
+
+	var x = e.pageX - getOffset(canvas).left,
+        y = e.pageY - getOffset(canvas).top;
+    if(x >= BOARD_WIDTH - 40 && x <= BOARD_WIDTH
+    	&& y >= HEADER_HEIGHT - 80 && y <= HEADER_HEIGHT - 40){
     	//TODO Анимация кнопки
     	init();
     }
@@ -440,3 +442,47 @@ document.addEventListener('keydown', function(event) {
         break;
     }
 });
+
+function getOffset(elem) {
+    if (elem.getBoundingClientRect) {
+        // "РїСЂР°РІРёР»СЊРЅС‹Р№" РІР°СЂРёР°РЅС‚
+        return getOffsetRect(elem)
+    } else {
+        // РїСѓСЃС‚СЊ СЂР°Р±РѕС‚Р°РµС‚ С…РѕС‚СЊ РєР°Рє-С‚Рѕ
+        return getOffsetSum(elem)
+    }
+}
+
+function getOffsetSum(elem) {
+    var top=0, left=0
+    while(elem) {
+        top = top + parseInt(elem.offsetTop)
+        left = left + parseInt(elem.offsetLeft)
+        elem = elem.offsetParent
+    }
+
+    return {top: top, left: left}
+}
+
+function getOffsetRect(elem) {
+    // (1)
+    var box = elem.getBoundingClientRect()
+
+    // (2)
+    var body = document.body
+    var docElem = document.documentElement
+
+    // (3)
+    var scrollTop = window.pageYOffset || docElem.scrollTop || body.scrollTop
+    var scrollLeft = window.pageXOffset || docElem.scrollLeft || body.scrollLeft
+
+    // (4)
+    var clientTop = docElem.clientTop || body.clientTop || 0
+    var clientLeft = docElem.clientLeft || body.clientLeft || 0
+
+    // (5)
+    var top  = box.top +  scrollTop - clientTop
+    var left = box.left + scrollLeft - clientLeft
+
+    return { top: Math.round(top), left: Math.round(left) }
+}
