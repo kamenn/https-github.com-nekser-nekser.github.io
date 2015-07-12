@@ -92,7 +92,7 @@ function main(){
 
 function update(dt){
 	gameTime += dt;
-	SPEED = 1 / (Math.floor( gameTime / 30 ) + 1);
+	SPEED = 1 / (Math.floor( gameTime / 60 ) + 1);
 	console.log(SPEED);
 	if(gameTime	- lastGameTime > SPEED){
 		lastGameTime = gameTime;
