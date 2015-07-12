@@ -27,11 +27,11 @@ var canvas = document.createElement('canvas'),
 
 	//TODO: в конфиг
 var BOARD_WIDTH = SQUARE_SIZE * 5;
-var BOARD_HEIGHT = SQUARE_SIZE * 8;
+var BOARD_HEIGHT = SQUARE_SIZE * 7;
 var STAND_HEIGHT = 15;
 var HEADER_HEIGHT = SQUARE_SIZE * 2;
 var OFFSET_TOP = HEADER_HEIGHT;
-
+var on_pause = false;
 var SCORE = 0;
 var freeColumns = [0,1,2,3,4];
 
@@ -49,6 +49,7 @@ resources.load([
     'images/bgr.png',
     'images/header.png',
     'images/refresh.png',
+    'images/pause.png',
     'images/logo.png'
 ]);
 resources.onReady(init);
@@ -59,6 +60,7 @@ resources.onReady(init);
 */
 function init(){
 	gameTime = 0;
+	on_pause = false;
 	gameOver = false;
 	SCORE = 0;
 	lastGameTime = 0;
@@ -84,23 +86,27 @@ function main(){
 
 		lastTime = now;
 		requestAnimFrame(main);
-	} else {
+	} else if(gameOver){
 		alert("Game Over!");
 	}
 }
 
 
 function update(dt){
-	gameTime += dt;
-	SPEED = 1 / (Math.floor( gameTime / 60 ) + 1);
-	console.log(SPEED);
-	if(gameTime	- lastGameTime > SPEED){
-		lastGameTime = gameTime;
-		//console.log("updateSquares");
-		updateSquares();
+	if(!on_pause){
+		gameTime += dt;
+		SPEED = 1 / (Math.floor( gameTime / 60 ) + 1);
+		//console.log(SPEED);
+	
+		if(gameTime	- lastGameTime > SPEED){
+			lastGameTime = gameTime;
+			//console.log("updateSquares");
+			updateSquares();
+		}
+		checkCollisions(squares[squares.length - 1]);
+		checkPoints();
 	}
-	checkCollisions(squares[squares.length - 1]);
-	checkPoints();
+
 }
 function linkSquares(index_a, index_b, type,callback){
 	 (function() {
@@ -345,8 +351,10 @@ function renderScore(){
 }
 function renderButtons(){
 	var refreshImage = resources.get('images/refresh.png');
+	var pauseImage = resources.get('images/pause.png');
 
 	context.drawImage(refreshImage, BOARD_WIDTH - 40, HEADER_HEIGHT - 80, 40, 40);
+	context.drawImage(pauseImage, 40, HEADER_HEIGHT - 70, 30, 30);
 }
 function renderLogo(){
 	var logoImage = resources.get('images/logo.png');
@@ -396,6 +404,15 @@ canvas.addEventListener('click', function(e){
     	&& y >= HEADER_HEIGHT - 80 && y <= HEADER_HEIGHT - 40){
     	//TODO Анимация кнопки
     	init();
+    }
+    if(x >= 40 && x <= 70
+    	&& y >= HEADER_HEIGHT - 70 && y <= HEADER_HEIGHT - 40){
+
+    	if(!on_pause){
+    		on_pause = true;
+    	} else {
+    		on_pause = false;
+    	}
     }
 });
 //Обработчик пользовательских нажатий (TODO: вынести в отдельный файл)
