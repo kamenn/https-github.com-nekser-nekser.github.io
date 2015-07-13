@@ -336,25 +336,25 @@ function renderTime(){
 	var seconds = Math.floor(gameTime % 60)
 	var time = minutes + ':' + (seconds < 10 ? '0'+seconds : seconds);
 
-	context.font = "20px HelveticaNeueCyr-Thin";
+	context.font = "25px HelveticaNeueCyr-Thin";
 	context.textAlign = "right";
 	context.textBaseline  = "bottom";
 	context.fillStyle = "white";
-	context.fillText("Time " + time, BOARD_WIDTH - 10, HEADER_HEIGHT - 10);
+	context.fillText("Time " + time, BOARD_WIDTH - 50, HEADER_HEIGHT - 20);
 }
 function renderScore(){
-	context.font = "20px HelveticaNeueCyr-Thin";
+	context.font = "25px HelveticaNeueCyr-Thin";
 	context.textAlign = "left";
 	context.textBaseline  = "bottom";
 	context.fillStyle = "white";
-	context.fillText("Score " + SCORE, 10, HEADER_HEIGHT - 10);
+	context.fillText("Score " + SCORE, 50, HEADER_HEIGHT - 20);
 }
 function renderButtons(){
 	var refreshImage = resources.get('images/refresh.png');
 	var pauseImage = resources.get('images/pause.png');
 
 	context.drawImage(refreshImage, BOARD_WIDTH - 40, HEADER_HEIGHT - 80, 40, 40);
-	context.drawImage(pauseImage, 40, HEADER_HEIGHT - 70, 30, 30);
+	context.drawImage(pauseImage, 10, HEADER_HEIGHT - 70, 13, 32);
 }
 function renderLogo(){
 	var logoImage = resources.get('images/logo.png');
@@ -405,7 +405,7 @@ canvas.addEventListener('click', function(e){
     	//TODO Анимация кнопки
     	init();
     }
-    if(x >= 40 && x <= 70
+    if(x >= 10 && x <= 40
     	&& y >= HEADER_HEIGHT - 70 && y <= HEADER_HEIGHT - 40){
 
     	if(!on_pause){
